@@ -149,6 +149,16 @@ body {
     margin-bottom: 1em;
 }
 
+.screen-right .pb-ranking-row.pb-player-out {
+    color: #e15353;
+    opacity: 0.6;
+}
+
+.screen-right .pb-ranking-row.pb-player-out .pb-player-eliminado {
+    font-size: 18px;
+    margin-left: 10px;
+}
+
 .screen-right .pb-player-photo {
     width: 3em;
     height: 2em;
@@ -175,7 +185,9 @@ body {
 .pb-ranking-row .pb-player-place {}
 
 .pb-ranking-row .pb-player-name {
-    width: 70%
+    width: 70%;
+    display: flex;
+    align-items: center;
 }
 
 .pb-ranking-row .pb-player-place {}

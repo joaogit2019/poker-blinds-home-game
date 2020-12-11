@@ -1,4 +1,32 @@
-﻿var timerClock = 0;
+﻿jQuery(document).on("click", ".pb-button-play", function() {
+    if (timerClockPaused) {
+        resumeTimer();
+    } else {
+        startTimer();
+    }
+});
+
+jQuery(document).on("click", ".pb-button-pause", function() {
+    pauseTimer();
+});
+
+jQuery(document).on("click", ".pb-button-stop", function() {
+    resetTimer();
+});
+
+jQuery(document).on("click", ".pb-button-next", function() {
+    stopTimer();
+    proximoNivel();
+});
+
+jQuery(document).on("click", ".pb-button-prev", function() {
+    stopTimer();
+    nivelAnterior();
+});
+
+jQuery("#pb-settings").text("Configurações");
+
+var timerClock = 0;
 
 var timerClockPaused = false;
 
@@ -143,8 +171,7 @@ var torneio = {
             small: 4000,
             big: 8000,
             ante: 8000,
-            duracao: minutosBlinds
-             * 60,
+            duracao: minutosBlinds * 60,
             break: false
         }
     ],
@@ -236,7 +263,8 @@ var ranking = {
             buyIn: true,
             reBuys: 0,
             addOn: true,
-            pontos: 10
+            pontos: 10,
+            eliminado: false
         },
         {
             id: 2,
@@ -246,7 +274,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 6
+            pontos: 6,
+            eliminado: false
         },
         {
             id: 2,
@@ -256,7 +285,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 3
+            pontos: 3,
+            eliminado: false
         },
         {
             id: 2,
@@ -266,7 +296,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 1
+            pontos: 1,
+            eliminado: false
         },
         {
             id: 2,
@@ -276,7 +307,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 1
+            pontos: 1,
+            eliminado: false
         },
         {
             id: 2,
@@ -286,7 +318,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 1
+            pontos: 1,
+            eliminado: false
         },
         {
             id: 2,
@@ -296,7 +329,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 1
+            pontos: 1,
+            eliminado: false
         },
         {
             id: 2,
@@ -306,7 +340,8 @@ var ranking = {
             buyIn: true,
             reBuys: 2,
             addOn: true,
-            pontos: 1
+            pontos: 1,
+            eliminado: false
         }
     ],
     torneios: [
@@ -336,65 +371,78 @@ var ranking = {
 };
 
 ranking.jogadores = [{
-    id: 1,
-    nomeJogador: "Daniel",
-    foto: "daniel.jpg",
-    posicao: 1,
-    buyIn: true,
-    reBuys: 0,
-    addOn: true,
-    pontos: 0
-},
-{
-    id: 2,
-    nomeJogador: "Fred",
-    foto: "fred.jpg",
-    posicao: 2,
-    buyIn: true,
-    reBuys: 2,
-    addOn: true,
-    pontos: 0
-},
-{
-    id: 2,
-    nomeJogador: "Shogo",
-    foto: "shogo.jpg",
-    posicao: 3,
-    buyIn: true,
-    reBuys: 2,
-    addOn: true,
-    pontos: 0
-},
-{
-    id: 2,
-    nomeJogador: "Luiz Paulo",
-    foto: "luizpaulo.jpg",
-    posicao: 4,
-    buyIn: true,
-    reBuys: 2,
-    addOn: true,
-    pontos: 0
-},
-{
-    id: 2,
-    nomeJogador: "João",
-    foto: "joao.jpg",
-    posicao: 5,
-    buyIn: true,
-    reBuys: 2,
-    addOn: true,
-    pontos: 0
-},
-{
-    id: 2,
-    nomeJogador: "Tiê",
-    foto: "tie.jpg",
-    posicao: 8,
-    buyIn: true,
-    reBuys: 2,
-    addOn: true,
-    pontos: 0
-}];
+        id: 1,
+        nomeJogador: "Daniel",
+        foto: "daniel.jpg",
+        posicao: 1,
+        buyIn: true,
+        reBuys: 0,
+        addOn: true,
+        pontos: 0,
+        eliminado: false,
+        eliminadoPor: ""
+    },
+    {
+        id: 2,
+        nomeJogador: "Fred",
+        foto: "fred.jpg",
+        posicao: 2,
+        buyIn: true,
+        reBuys: 2,
+        addOn: true,
+        pontos: 0,
+        eliminado: false,
+        eliminadoPor: ""
+    },
+    {
+        id: 2,
+        nomeJogador: "Shogo",
+        foto: "shogo.jpg",
+        posicao: 3,
+        buyIn: true,
+        reBuys: 2,
+        addOn: true,
+        pontos: 0,
+        eliminado: false,
+        eliminadoPor: ""
+    },
+    {
+        id: 2,
+        nomeJogador: "Luiz Paulo",
+        foto: "luizpaulo.jpg",
+        posicao: 4,
+        buyIn: true,
+        reBuys: 2,
+        addOn: true,
+        pontos: 0,
+        eliminado: false,
+        eliminadoPor: ""
+    },
+    {
+        id: 2,
+        nomeJogador: "João",
+        foto: "joao.jpg",
+        posicao: 5,
+        buyIn: true,
+        reBuys: 2,
+        addOn: true,
+        pontos: 0,
+        eliminado: false,
+        eliminadoPor: ""
+    },
+    {
+        id: 2,
+        nomeJogador: "Tiê",
+        foto: "tie.jpg",
+        posicao: 8,
+        buyIn: true,
+        reBuys: 2,
+        addOn: true,
+        pontos: 0,
+        eliminado: false,
+        eliminadoPor: ""
+    }
+];
 
 jQuery(document).ready(function() {
     montarLeft();
@@ -424,63 +472,44 @@ function montarLeft() {
 
 function montarCenter() {
     mudarNivel();
-
-    jQuery(document).on("click", ".pb-button-play", function() {
-        if (timerClockPaused) {
-            resumeTimer();
-        } else {
-            startTimer();
-        }
-    });
-
-    jQuery(document).on("click", ".pb-button-pause", function() {
-        pauseTimer();
-    });
-
-    jQuery(document).on("click", ".pb-button-stop", function() {
-        resetTimer();
-    });
-
-    jQuery(document).on("click", ".pb-button-next", function() {
-        pauseTimer();
-        proximoNivel();
-    });
-
-    jQuery(document).on("click", ".pb-button-prev", function() {
-        pauseTimer();
-    });
-
-    jQuery("#pb-settings").text("Configurações");
 }
 
-function proximoNivel () {
+function proximoNivel() {
     torneio.nivel = torneio.nivel + 1;
     localStorage.setItem('nivel', torneio.nivel);
     mudarNivel();
 }
 
-function nivelAnterior () {
-    torneio.nivel = torneio.nivel + 1;
+function nivelAnterior() {
+    torneio.nivel = torneio.nivel > 1 ? torneio.nivel - 1 : 1;
     localStorage.setItem('nivel', torneio.nivel);
     mudarNivel();
 }
 
 function mudarNivel() {
+    tocarSino();
+
+    var blinds = obterPorValor(torneio.blinds, "nivel", torneio.nivel);
     var nivelRecuperado = localStorage.getItem("nivel");
-    var timerRecuperado = localStorage.getItem("timer");
-    
-    if (nivelRecuperado == null) {
-        jQuery("#pb-info-level").text("Nível " + torneio.nivel);
-        var blinds = obterPorValor(torneio.blinds, "nivel", torneio.nivel);
-        montarBlinds(blinds);
-        montarTimer(blinds.duracao);
+
+    if (blinds == undefined) {
+        resetTimer();
     } else {
-        torneio.nivel = parseInt(nivelRecuperado);
-        jQuery("#pb-info-level").text("Nível " + torneio.nivel);
-        var blinds = obterPorValor(torneio.blinds, "nivel", torneio.nivel);
-        montarBlinds(blinds);
-        montarTimer(parseInt(timerRecuperado));
-        startTimer();
+        if (nivelRecuperado == null) {
+            jQuery("#pb-info-level").text("Nível " + torneio.nivel);
+
+            montarBlinds(blinds);
+            montarTimer(blinds.duracao);
+        } else {
+            torneio.nivel = parseInt(nivelRecuperado);
+            blinds = obterPorValor(torneio.blinds, "nivel", torneio.nivel);
+            var timerRecuperado = localStorage.getItem("timer") || blinds.duracao;
+            jQuery("#pb-info-level").text("Nível " + torneio.nivel);
+
+            montarBlinds(blinds);
+            montarTimer(parseInt(timerRecuperado));
+            startTimer();
+        }
     }
 }
 
@@ -505,26 +534,30 @@ function montarRight() {
 function montarPlayers() {
     jQuery("#pb-ranking-box").empty();
 
-    var templatePlayer = '<div class="pb-ranking-row"><div class="pb-player-place">';
-    templatePlayer += '{player-place}º';
+    var templatePlayer = '<div class="pb-ranking-row {player-eliminado-class}"><div class="pb-player-place">';
+    templatePlayer += '{player-place}';
     templatePlayer += '</div>';
     templatePlayer += '<div class="pb-player-photo" style="background-image: url(\'./assets/imagens/players/{player-photo}\');">';
     templatePlayer += '';
     templatePlayer += '</div>';
     templatePlayer += '<div class="pb-player-name">';
-    templatePlayer += '{player-name}';
+    templatePlayer += '{player-name} <div class="pb-player-eliminado">{player-eliminado}</div>';
     templatePlayer += '</div>';
-    templatePlayer += '<div class="pb-player-points">';
+    templatePlayer += '<div class="pb-player-points" style="display:none">';
     templatePlayer += '{player-points}';
     templatePlayer += '</div></div>';
 
     for (var i = 0; i < ranking.jogadores.length; i++) {
         var player = ranking.jogadores[i];
         var template = templatePlayer;
+        var eliminado = player.eliminado ? " (Eliminado por " + player.eliminadoPor + ")" : "";
+        var eliminadoClass = player.eliminado ? "pb-player-out" : "";
 
-        template = template.replace("{player-place}", player.posicao);
+        template = template.replace("{player-place}", i + 1); //player.posicao);
         template = template.replace("{player-photo}", player.foto);
+        template = template.replace("{player-eliminado-class}", eliminadoClass);
         template = template.replace("{player-name}", player.nomeJogador);
+        template = template.replace("{player-eliminado}", eliminado);
         template = template.replace("{player-points}", player.pontos);
 
         jQuery("#pb-ranking-box").append(template);
@@ -560,6 +593,7 @@ function millisToMinutesAndSeconds(millis) {
 }
 
 function startTimer() {
+    pauseTimer();
     var display = document.querySelector('#pb-timer');
     var blinds = obterPorValor(torneio.blinds, "nivel", torneio.nivel);
     var duration = blinds.duracao;
@@ -587,9 +621,19 @@ function startTimer() {
     var blue = 0;
 
     timerClock = setInterval(function() {
-
         localStorage.setItem('timer', timer);
         localStorage.setItem('nivel', torneio.nivel);
+
+        let qtdRestantes = 0;
+
+        for (var i = 0; i < ranking.jogadores.length; i++) {
+            let eliminado = ranking.jogadores[i].eliminado;
+            if (!eliminado) {
+                qtdRestantes++;
+            }
+        }
+
+        jQuery("#pb-info-players").text(qtdRestantes + " de " + ranking.jogadores.length + " jogadores");
 
         minutes = parseInt(timer / 60, 10);
         seconds = parseInt(timer % 60, 10);
@@ -623,8 +667,7 @@ function startTimer() {
         }
 
         if (--timer < 0) {
-            var mySound = new sound("./assets/sons/sino.mp3");
-            mySound.play();
+            tocarSino();
             localStorage.clear();
             timer = duration;
             stopTimer();
@@ -638,6 +681,11 @@ function startTimer() {
     }, 1000);
 }
 
+function tocarSino() {
+    var mySound = new sound("./assets/sons/sino.mp3");
+    mySound.play();
+}
+
 function pauseTimer() {
     timerClockPaused = true;
     clearInterval(timerClock);
@@ -646,6 +694,7 @@ function pauseTimer() {
 function stopTimer() {
     timerClockPaused = false;
     clearInterval(timerClock);
+    localStorage.removeItem("timer");
 }
 
 function resetTimer() {
