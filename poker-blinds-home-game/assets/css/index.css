@@ -185,9 +185,20 @@ body {
 .pb-ranking-row .pb-player-place {}
 
 .pb-ranking-row .pb-player-name {
-    width: 70%;
+    width: 30%;
     display: flex;
     align-items: center;
+}
+
+.pb-ranking-row .pb-player-points {
+    font-size: 15px;
+    color: #5b9f5b;
+}
+
+.pb-ranking-row .pb-player-points span {
+    font-size: 20px;
+    color: #ffd507;
+    display: block;
 }
 
 .pb-ranking-row .pb-player-place {}

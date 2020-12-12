@@ -1,4 +1,6 @@
-﻿jQuery(document).on("click", ".pb-button-play", function() {
+﻿var pote = 0;
+
+jQuery(document).on("click", ".pb-button-play", function() {
     if (timerClockPaused) {
         resumeTimer();
     } else {
@@ -201,7 +203,7 @@ var torneio = {
         fichas: 15000
     },
     reBuy: {
-        valor: 20,
+        valor: 30,
         fichas: 10000
     },
     addOn: {
@@ -376,11 +378,11 @@ ranking.jogadores = [{
         foto: "daniel.jpg",
         posicao: 1,
         buyIn: true,
-        reBuys: 0,
+        reBuys: 2,
         addOn: true,
         pontos: 0,
-        eliminado: false,
-        eliminadoPor: ""
+        eliminado: true,
+        eliminadoPor: "Shogo"
     },
     {
         id: 2,
@@ -388,7 +390,7 @@ ranking.jogadores = [{
         foto: "fred.jpg",
         posicao: 2,
         buyIn: true,
-        reBuys: 2,
+        reBuys: 0,
         addOn: true,
         pontos: 0,
         eliminado: false,
@@ -400,7 +402,7 @@ ranking.jogadores = [{
         foto: "shogo.jpg",
         posicao: 3,
         buyIn: true,
-        reBuys: 2,
+        reBuys: 6,
         addOn: true,
         pontos: 0,
         eliminado: false,
@@ -415,8 +417,8 @@ ranking.jogadores = [{
         reBuys: 2,
         addOn: true,
         pontos: 0,
-        eliminado: false,
-        eliminadoPor: ""
+        eliminado: true,
+        eliminadoPor: "Fred"
     },
     {
         id: 2,
@@ -424,11 +426,11 @@ ranking.jogadores = [{
         foto: "joao.jpg",
         posicao: 5,
         buyIn: true,
-        reBuys: 2,
+        reBuys: 0,
         addOn: true,
         pontos: 0,
-        eliminado: false,
-        eliminadoPor: ""
+        eliminado: true,
+        eliminadoPor: "Shogo"
     },
     {
         id: 2,
@@ -436,11 +438,11 @@ ranking.jogadores = [{
         foto: "tie.jpg",
         posicao: 8,
         buyIn: true,
-        reBuys: 2,
+        reBuys: 3,
         addOn: true,
         pontos: 0,
-        eliminado: false,
-        eliminadoPor: ""
+        eliminado: true,
+        eliminadoPor: "Luiz Paulo"
     }
 ];
 
@@ -528,6 +530,7 @@ function resumeTimer() {
 }
 
 function montarRight() {
+    pote = 0;
     montarPlayers();
 }
 
@@ -543,8 +546,8 @@ function montarPlayers() {
     templatePlayer += '<div class="pb-player-name">';
     templatePlayer += '{player-name} <div class="pb-player-eliminado">{player-eliminado}</div>';
     templatePlayer += '</div>';
-    templatePlayer += '<div class="pb-player-points" style="display:none">';
-    templatePlayer += '{player-points}';
+    templatePlayer += '<div class="pb-player-points">';
+    templatePlayer += '{player-points}<span>{player-total}</span>';
     templatePlayer += '</div></div>';
 
     for (var i = 0; i < ranking.jogadores.length; i++) {
@@ -553,15 +556,60 @@ function montarPlayers() {
         var eliminado = player.eliminado ? " (Eliminado por " + player.eliminadoPor + ")" : "";
         var eliminadoClass = player.eliminado ? "pb-player-out" : "";
 
+        var saldo = montarSaldo(player);
+
         template = template.replace("{player-place}", i + 1); //player.posicao);
         template = template.replace("{player-photo}", player.foto);
         template = template.replace("{player-eliminado-class}", eliminadoClass);
         template = template.replace("{player-name}", player.nomeJogador);
         template = template.replace("{player-eliminado}", eliminado);
-        template = template.replace("{player-points}", player.pontos);
+        template = template.replace("{player-points}", saldo.resumo);
+        template = template.replace("{player-total}", saldo.total);
 
         jQuery("#pb-ranking-box").append(template);
+
+
     }
+
+    jQuery("#pb-info-chips-average .value").text("R$ " + pote.toFixed(2));
+}
+
+function montarSaldo(player) {
+    let texto = "";
+
+    let valorPago = 0;
+
+    if (player.buyIn) {
+        valorPago += torneio.buyIn.valor;
+    }
+
+    valorPago += torneio.reBuy.valor * player.reBuys;
+
+    if (player.reBuys == 2) {
+        valorPago -= 10;
+    } else if (player.reBuys == 3) {
+        valorPago -= 10;
+    } else if (player.reBuys == 4) {
+        valorPago -= 20;
+    } else if (player.reBuys == 5) {
+        valorPago -= 20;
+
+    } else if (player.reBuys == 6) {
+        valorPago -= 30;
+    }
+
+    if (player.addOn) {
+        valorPago += torneio.addOn.valor;
+    }
+
+    texto += player.buyIn ? "Buy-in: 1" : "Buy-in: 0";
+    texto += " / Rebuys: " + player.reBuys;
+    texto += player.addOn ? " / Add-on: 1" : " / Add-on: 0";
+
+    var textoTotal = "Total: R$" + valorPago.toFixed(2);
+    pote += valorPago;
+
+    return { resumo: texto, total: textoTotal };
 }
 
 function montarBlinds(blinds) {
